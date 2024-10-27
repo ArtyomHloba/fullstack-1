@@ -1,12 +1,15 @@
 import axios from 'axios';
 
-// TODO: host/post to constant
-const httpClient = axios.create({
-  baseURL: 'http://localhost:5000/api',
-});
+// TODO: host/port to constant
+const httpClient = axios.create({ baseURL: 'http://localhost:5000/api' });
 
-export const createUser = () => httpClient.post('/users', body);
+// if js-object => Content-Type: Application/json
+//    data => req.body
+// if FormData => Content-Type: multipart/form-data
+//    data (text) => (multer) => req.body
+//    data (file) => (multer) => req.file
+export const createUser = body => httpClient.post('/users', body);
 
-export const getUsers = () => httpClient.get('/users?results=5&page=1');
+export const getUsers = () => httpClient.get('/users');
 
 export const removeUser = id => httpClient.delete(`/users/${id}`);

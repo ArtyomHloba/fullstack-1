@@ -15,11 +15,29 @@ function UserForm ({ createUser }) {
     passwHash: '',
     birthday: '',
     gender: GENDERS[0],
-    // userPhoto: '',
+    userPhoto: '',
   };
 
   const handleSubmit = (values, formikBag) => {
-    console.log('values :>> ', values);
+    // json: Content-Type: application/json
+    // if (!values.birthday) {
+    //   delete values.birthday;
+    // }
+    // createUser(values);
+
+    // text + file : Content-Type: multipart/form-data
+    const formData = new FormData();
+    // multer: formData(text) => req.body
+    formData.append('nickname', values.nickname);
+    formData.append('email', values.email);
+    formData.append('passwHash', values.passwHash);
+    if (values.birthday) {
+      formData.append('birthday', values.birthday);
+    }
+    formData.append('gender', values.gender);
+    // multer: formData(file) => req.file
+    formData.append('userPhoto', values.userPhoto);
+    createUser(formData);
     formikBag.resetForm();
   };
 
@@ -73,7 +91,13 @@ function UserForm ({ createUser }) {
           ))}
           <label>
             <span>Photo:</span>
-            <input type='file' name='userPhoto' />
+            <input
+              type='file'
+              name='userPhoto'
+              onChange={e => {
+                formikProps.setFieldValue('userPhoto', e.target.files[0]);
+              }}
+            />
           </label>
           <button type='submit'>Save</button>
         </Form>
